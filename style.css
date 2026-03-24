@@ -211,6 +211,15 @@ input::placeholder { color: rgba(240,222,180,0.22); }
 }
 .count-select:focus { border-color: var(--gold); }
 
+.name-hint {
+    font-style: italic;
+    font-size: 0.82rem;
+    color: var(--parchment-dim);
+    opacity: 0.7;
+    margin-bottom: 10px;
+    padding: 0 2px;
+}
+
 /* ════════════════════════════════════
    BUTTONS
 ════════════════════════════════════ */
@@ -369,16 +378,18 @@ button { cursor: pointer; font-family: 'Cinzel', serif; border: none; transition
 .skull-btn {
     background: none;
     border: none;
-    color: rgba(240,222,180,0.18);
+    color: rgba(240, 222, 180, 0.75);
     font-size: 0.95rem;
     cursor: pointer;
     padding: 2px 5px;
     border-radius: 2px;
     line-height: 1;
     transition: color 0.15s, text-shadow 0.15s;
+    title: "Mark as dead";
 }
-.skull-btn:hover { color: var(--monster); }
+.skull-btn:hover { color: var(--monster); text-shadow: 0 0 6px rgba(192,57,43,0.5); }
 .skull-btn.is-dead { color: var(--monster); text-shadow: 0 0 8px rgba(192,57,43,0.55); }
+.skull-btn.is-dead:hover { color: rgba(240,222,180,0.75); text-shadow: none; }
 
 /* Scrollbar */
 .order-list::-webkit-scrollbar       { width: 4px; }

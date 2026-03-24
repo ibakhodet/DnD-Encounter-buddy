@@ -60,10 +60,19 @@ function getNextAliveIdx(fromIdx) {
     return null;
 }
 
-// Show/hide count wrap when type changes
-function updateCountWrap(radioName, wrapId) {
+// Show/hide count wrap and hint when type changes
+function updateCountWrap(radioName, wrapId, hintId) {
     const type = document.querySelector(`input[name="${radioName}"]:checked`).value;
-    document.getElementById(wrapId).style.display = type === 'monster' ? 'flex' : 'none';
+    const show = type === 'monster' || type === 'npc';
+    document.getElementById(wrapId).style.display = show ? 'flex' : 'none';
+    document.getElementById(hintId).style.display = show ? 'block' : 'none';
+}
+
+// Parse "Goblin x5" → { baseName: "Goblin", count: 5 }
+function parseNameCount(raw) {
+    const match = raw.match(/^(.+?)\s+x(\d+)$/i);
+    if (match) return { baseName: match[1].trim(), count: Math.min(parseInt(match[2]), 20) };
+    return { baseName: raw, count: null };
 }
 
 // ── Setup: Add Combatant ────────────────────────────────────────────────────
@@ -79,11 +88,13 @@ function addCombatant() {
     if (isNaN(init)) { flash(initEl); valid = false; }
     if (!valid) return;
 
-    if (type === 'monster') {
-        const count = parseInt(document.getElementById('monster-count').value, 10) || 1;
+    if (type === 'monster' || type === 'npc') {
+        const parsed = parseNameCount(name);
+        const baseName = parsed.baseName;
+        const count = parsed.count ?? (parseInt(document.getElementById('monster-count').value, 10) || 1);
         for (let i = 0; i < count; i++) {
-            const num = getNextMonsterNum(name);
-            combatants.push({ id: Date.now() + i, name: `${name} ${num}`, initiative: init, type, dead: false });
+            const num = getNextMonsterNum(baseName);
+            combatants.push({ id: Date.now() + i, name: `${baseName} ${num}`, initiative: init, type, dead: false });
         }
     } else {
         combatants.push({ id: Date.now(), name, initiative: init, type, dead: false });
@@ -248,11 +259,13 @@ function submitMidCombat() {
     if (!valid) return;
 
     const newOnes = [];
-    if (type === 'monster') {
-        const count = parseInt(document.getElementById('mc-monster-count').value, 10) || 1;
+    if (type === 'monster' || type === 'npc') {
+        const parsed = parseNameCount(name);
+        const baseName = parsed.baseName;
+        const count = parsed.count ?? (parseInt(document.getElementById('mc-monster-count').value, 10) || 1);
         for (let i = 0; i < count; i++) {
-            const num = getNextMonsterNum(name);
-            newOnes.push({ id: Date.now() + i, name: `${name} ${num}`, initiative: init, type, dead: false });
+            const num = getNextMonsterNum(baseName);
+            newOnes.push({ id: Date.now() + i, name: `${baseName} ${num}`, initiative: init, type, dead: false });
         }
     } else {
         newOnes.push({ id: Date.now(), name, initiative: init, type, dead: false });
@@ -314,10 +327,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Show/hide count wrap on type change
     document.querySelectorAll('input[name="type"]').forEach(r =>
-        r.addEventListener('change', () => updateCountWrap('type', 'count-wrap'))
+        r.addEventListener('change', () => updateCountWrap('type', 'count-wrap', 'name-hint'))
     );
     document.querySelectorAll('input[name="mc-type"]').forEach(r =>
-        r.addEventListener('change', () => updateCountWrap('mc-type', 'mc-count-wrap'))
+        r.addEventListener('change', () => updateCountWrap('mc-type', 'mc-count-wrap', 'mc-name-hint'))
     );
 
     // Enter key to submit
