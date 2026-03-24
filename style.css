@@ -473,4 +473,24 @@ button { cursor: pointer; font-family: 'Cinzel', serif; border: none; transition
     from { opacity: 0; transform: translateY(6px); }
     to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ════════════════════════════════════
+   FOOTER
+════════════════════════════════════ */
+.site-footer {
+    text-align: center;
+    padding: 1rem;
+    font-family: 'IM Fell English', serif;
+    font-size: 0.78rem;
+    color: var(--parchment-dim);
+    letter-spacing: 0.03em;
+}
+.site-footer a {
+    color: var(--gold);
+    text-decoration: none;
+}
+.site-footer a:hover {
+    color: var(--gold-light);
+    text-decoration: underline;
+}
 .current-card { animation: fadeIn 0.3s ease; }
