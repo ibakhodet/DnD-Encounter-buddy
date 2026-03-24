@@ -39,9 +39,11 @@
                         <span>🗣 NPC</span>
                     </label>
                 </div>
-                <button id="add-btn" onclick="addCombatant()">
-                    + Add to Encounter
-                </button>
+                <div id="count-wrap" class="count-wrap" style="display:none">
+                    <span class="count-label">Quantity</span>
+                    <select id="monster-count" class="count-select"></select>
+                </div>
+                <button id="add-btn" onclick="addCombatant()">+ Add to Encounter</button>
             </div>
 
             <div class="card" id="list-card">
@@ -82,9 +84,38 @@
 
             <div class="order-list" id="order-list"></div>
 
+            <!-- Mid-combat add panel (hidden by default) -->
+            <div id="mid-combat-panel" class="mid-combat-panel" style="display:none">
+                <h3 class="mc-title">Add Combatant to Encounter</h3>
+                <div class="form-row">
+                    <input type="text" id="mc-name" placeholder="Name..." maxlength="30" autocomplete="off">
+                    <input type="number" id="mc-initiative" placeholder="Init." min="-10" max="99" autocomplete="off">
+                </div>
+                <div class="type-selector">
+                    <label class="type-opt player">
+                        <input type="radio" name="mc-type" value="player" checked>
+                        <span>⚔ Player</span>
+                    </label>
+                    <label class="type-opt monster">
+                        <input type="radio" name="mc-type" value="monster">
+                        <span>☠ Monster</span>
+                    </label>
+                    <label class="type-opt npc">
+                        <input type="radio" name="mc-type" value="npc">
+                        <span>🗣 NPC</span>
+                    </label>
+                </div>
+                <div id="mc-count-wrap" class="count-wrap" style="display:none">
+                    <span class="count-label">Quantity</span>
+                    <select id="mc-monster-count" class="count-select"></select>
+                </div>
+                <button class="mc-submit-btn" onclick="submitMidCombat()">⊕ Add to Encounter</button>
+            </div>
+
             <div class="encounter-controls">
                 <button id="next-btn" onclick="nextTurn()">Next Turn ▶</button>
-                <button id="end-btn" onclick="endEncounter()">End Encounter</button>
+                <button id="add-mid-btn" onclick="toggleMidCombat()">⊕ Add</button>
+                <button id="end-btn" onclick="endEncounter()">End</button>
             </div>
         </main>
     </div>
