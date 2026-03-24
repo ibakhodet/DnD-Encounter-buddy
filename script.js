@@ -1,5 +1,5 @@
 // ════════════════════════════════════
-//  D&D Encounter Tracker
+//  DnD Encounter Buddy
 // ════════════════════════════════════
 
 let combatants = [];   // { id, name, initiative, type, dead }
