@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D Encounter Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ══════════ SETUP SCREEN ══════════ -->
+    <div id="setup-screen" class="screen active">
+        <header>
+            <div class="header-deco">⚔</div>
+            <h1>D&D Encounter</h1>
+            <p class="subtitle">Tracker</p>
+            <div class="divider"></div>
+        </header>
+
+        <main class="setup-main">
+            <div class="card">
+                <h2 class="card-title">Add Combatant</h2>
+                <div class="form-row">
+                    <input type="text" id="name-input" placeholder="Name..." maxlength="30" autocomplete="off">
+                    <input type="number" id="initiative-input" placeholder="Init." min="-10" max="99" autocomplete="off">
+                </div>
+                <div class="type-selector">
+                    <label class="type-opt player">
+                        <input type="radio" name="type" value="player" checked>
+                        <span>⚔ Player</span>
+                    </label>
+                    <label class="type-opt monster">
+                        <input type="radio" name="type" value="monster">
+                        <span>☠ Monster</span>
+                    </label>
+                    <label class="type-opt npc">
+                        <input type="radio" name="type" value="npc">
+                        <span>🗣 NPC</span>
+                    </label>
+                </div>
+                <button id="add-btn" onclick="addCombatant()">
+                    + Add to Encounter
+                </button>
+            </div>
+
+            <div class="card" id="list-card">
+                <h2 class="card-title">
+                    Initiative Order
+                    <span id="combatant-count" class="count-badge"></span>
+                </h2>
+                <div id="list-items">
+                    <p class="empty-state">No combatants yet — add some above.</p>
+                </div>
+            </div>
+
+            <button id="start-btn" onclick="startEncounter()" disabled>
+                ⚔&nbsp;&nbsp;Begin Encounter&nbsp;&nbsp;⚔
+            </button>
+        </main>
+    </div>
+
+    <!-- ══════════ ENCOUNTER SCREEN ══════════ -->
+    <div id="encounter-screen" class="screen">
+        <header>
+            <p class="round-label">Round <span id="round-number">1</span></p>
+            <h1>D&D Encounter</h1>
+            <div class="divider"></div>
+        </header>
+
+        <main class="encounter-main">
+            <div class="current-card">
+                <p class="turn-label">⚔ &nbsp;Current Turn&nbsp; ⚔</p>
+                <div class="current-type-badge" id="current-type"></div>
+                <p class="current-name" id="current-name">—</p>
+                <p class="current-initiative">Initiative: <span id="current-initiative">—</span></p>
+            </div>
+
+            <div class="next-banner">
+                <p id="next-message"></p>
+            </div>
+
+            <div class="order-list" id="order-list"></div>
+
+            <div class="encounter-controls">
+                <button id="next-btn" onclick="nextTurn()">Next Turn ▶</button>
+                <button id="end-btn" onclick="endEncounter()">End Encounter</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

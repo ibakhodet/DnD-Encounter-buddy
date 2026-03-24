@@ -1,0 +1,502 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap');
+
+/* ════════════════════════════════════
+   VARIABLES & RESET
+════════════════════════════════════ */
+:root {
+    --bg:           #0c0702;
+    --bg-card:      #180e04;
+    --gold:         #c9a84c;
+    --gold-light:   #e8c96d;
+    --gold-dark:    #7a5f1a;
+    --gold-glow:    rgba(201, 168, 76, 0.35);
+    --parchment:    #f0deb4;
+    --parchment-dim:#b89a60;
+    --border:       rgba(201, 168, 76, 0.25);
+    --shadow:       rgba(0, 0, 0, 0.85);
+    --player:       #4a9ede;
+    --monster:      #c0392b;
+    --npc:          #4caf7d;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background-color: var(--bg);
+    /* subtle noise texture via SVG data URI */
+    background-image:
+        radial-gradient(ellipse at 50% 0%, #221005 0%, #0c0702 65%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    color: var(--parchment);
+    font-family: 'IM Fell English', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ════════════════════════════════════
+   SCREENS
+════════════════════════════════════ */
+.screen {
+    display: none;
+    min-height: 100vh;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+}
+.screen.active { display: block; }
+
+/* ════════════════════════════════════
+   HEADER
+════════════════════════════════════ */
+header {
+    text-align: center;
+    padding: 32px 0 24px;
+}
+
+.header-deco {
+    font-size: 2.4rem;
+    display: block;
+    margin-bottom: 6px;
+    filter: drop-shadow(0 0 12px var(--gold-glow));
+}
+
+header h1 {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    color: var(--gold);
+    letter-spacing: 4px;
+    text-shadow: 0 0 24px var(--gold-glow), 2px 2px 6px var(--shadow);
+    line-height: 1.1;
+}
+
+.subtitle {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 10px;
+    color: var(--parchment-dim);
+    text-transform: uppercase;
+    margin-top: 5px;
+}
+
+.round-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 4px;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.divider {
+    width: 70%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    margin: 18px auto 0;
+    opacity: 0.6;
+}
+
+/* ════════════════════════════════════
+   CARD
+════════════════════════════════════ */
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 22px 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 6px 28px var(--shadow), inset 0 1px 0 rgba(201,168,76,0.07);
+    position: relative;
+}
+
+/* Corner ornaments */
+.card::before, .card::after,
+#list-card::before, #list-card::after {
+    position: absolute;
+    color: var(--gold-dark);
+    font-size: 0.75rem;
+    line-height: 1;
+}
+.card::before { content: '✦'; top: 8px; left: 10px; }
+.card::after  { content: '✦'; top: 8px; right: 10px; }
+
+.card-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+}
+
+.count-badge {
+    font-size: 0.8rem;
+    color: var(--parchment-dim);
+    letter-spacing: 1px;
+}
+
+/* ════════════════════════════════════
+   FORM
+════════════════════════════════════ */
+.form-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+input[type="text"],
+input[type="number"] {
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--parchment);
+    padding: 10px 14px;
+    font-family: 'IM Fell English', serif;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+input[type="text"]   { flex: 2; min-width: 0; }
+input[type="number"] { flex: 1; min-width: 70px; }
+
+input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 10px rgba(201, 168, 76, 0.18);
+}
+input.error { border-color: var(--monster) !important; }
+input::placeholder { color: rgba(240, 222, 180, 0.25); }
+
+/* ════════════════════════════════════
+   TYPE SELECTOR
+════════════════════════════════════ */
+.type-selector {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.type-opt {
+    flex: 1;
+    cursor: pointer;
+}
+.type-opt input[type="radio"] { display: none; }
+
+.type-opt span {
+    display: block;
+    padding: 8px 4px;
+    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--parchment-dim);
+    transition: all 0.18s;
+    user-select: none;
+}
+.type-opt:hover span { border-color: var(--gold-dark); color: var(--parchment); }
+
+.type-opt.player  input:checked ~ span { border-color: var(--player);  color: var(--player);  background: rgba(74,158,222,0.12); }
+.type-opt.monster input:checked ~ span { border-color: var(--monster); color: var(--monster); background: rgba(192,57,43,0.12);  }
+.type-opt.npc     input:checked ~ span { border-color: var(--npc);     color: var(--npc);     background: rgba(76,175,125,0.12); }
+
+/* ════════════════════════════════════
+   BUTTONS
+════════════════════════════════════ */
+button {
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    border: none;
+    transition: all 0.18s;
+    letter-spacing: 1.5px;
+}
+
+#add-btn {
+    width: 100%;
+    padding: 11px;
+    background: linear-gradient(160deg, #251200, #3a1c00);
+    border: 1px solid var(--gold-dark);
+    color: var(--gold);
+    border-radius: 3px;
+    font-size: 0.9rem;
+}
+#add-btn:hover {
+    background: linear-gradient(160deg, #3a1c00, #522800);
+    border-color: var(--gold);
+    box-shadow: 0 0 14px rgba(201,168,76,0.22);
+}
+#add-btn:active { transform: scale(0.98); }
+
+#start-btn {
+    display: block;
+    width: 100%;
+    padding: 17px;
+    background: linear-gradient(160deg, #4a0000, #7a1010);
+    border: 2px solid #7a1010;
+    color: var(--parchment);
+    border-radius: 4px;
+    font-size: 1rem;
+    letter-spacing: 4px;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.9);
+    margin-bottom: 8px;
+}
+#start-btn:not(:disabled):hover {
+    background: linear-gradient(160deg, #7a1010, #9e1515);
+    border-color: var(--gold-dark);
+    box-shadow: 0 0 22px rgba(139,26,26,0.55);
+}
+#start-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+#start-btn:not(:disabled):active { transform: scale(0.99); }
+
+/* ════════════════════════════════════
+   COMBATANT LIST (Setup)
+════════════════════════════════════ */
+.empty-state {
+    text-align: center;
+    color: var(--parchment-dim);
+    font-style: italic;
+    padding: 18px 0;
+    opacity: 0.55;
+    font-size: 0.95rem;
+}
+
+.combatant-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 4px;
+    border-bottom: 1px solid rgba(201,168,76,0.08);
+}
+.combatant-item:last-child { border-bottom: none; }
+
+.c-init {
+    font-family: 'Cinzel', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--gold);
+    min-width: 34px;
+    text-align: center;
+}
+
+.c-name { flex: 1; font-size: 1rem; }
+
+.type-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+}
+.type-badge.player  { border: 1px solid var(--player);  color: var(--player);  }
+.type-badge.monster { border: 1px solid var(--monster); color: var(--monster); }
+.type-badge.npc     { border: 1px solid var(--npc);     color: var(--npc);     }
+
+.remove-btn {
+    background: none;
+    border: none;
+    color: rgba(240,222,180,0.25);
+    font-size: 1rem;
+    padding: 2px 6px;
+    border-radius: 2px;
+    line-height: 1;
+    transition: color 0.15s;
+}
+.remove-btn:hover { color: var(--monster); }
+
+/* ════════════════════════════════════
+   CURRENT TURN CARD (Encounter)
+════════════════════════════════════ */
+.current-card {
+    background: linear-gradient(160deg, #150800, #221000);
+    border: 2px solid var(--gold-dark);
+    border-radius: 6px;
+    padding: 32px 24px 28px;
+    text-align: center;
+    margin-bottom: 14px;
+    box-shadow:
+        0 0 40px rgba(201,168,76,0.1),
+        inset 0 0 40px rgba(0,0,0,0.45);
+    position: relative;
+    overflow: hidden;
+}
+
+.current-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center top, rgba(201,168,76,0.06) 0%, transparent 65%);
+    pointer-events: none;
+}
+
+.turn-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 6px;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.current-type-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    padding: 3px 14px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+.current-type-badge.player  { border: 1px solid var(--player);  color: var(--player);  }
+.current-type-badge.monster { border: 1px solid var(--monster); color: var(--monster); }
+.current-type-badge.npc     { border: 1px solid var(--npc);     color: var(--npc);     }
+
+.current-name {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(1.6rem, 6vw, 2.4rem);
+    color: var(--gold-light);
+    text-shadow: 0 0 24px var(--gold-glow);
+    margin: 4px 0 10px;
+    word-break: break-word;
+    line-height: 1.15;
+}
+
+.current-initiative {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    color: var(--parchment-dim);
+    letter-spacing: 3px;
+}
+
+/* ════════════════════════════════════
+   NEXT UP BANNER
+════════════════════════════════════ */
+.next-banner {
+    background: rgba(0,0,0,0.28);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 13px 20px;
+    text-align: center;
+    margin-bottom: 18px;
+    font-style: italic;
+    color: var(--parchment-dim);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    min-height: 48px;
+}
+.next-banner strong {
+    color: var(--parchment);
+    font-style: normal;
+}
+
+/* ════════════════════════════════════
+   ORDER LIST (Encounter)
+════════════════════════════════════ */
+.order-list {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px;
+    margin-bottom: 18px;
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border-radius: 3px;
+    margin-bottom: 3px;
+    transition: opacity 0.25s, background 0.25s;
+}
+.order-item:last-child { margin-bottom: 0; }
+
+.order-item.active {
+    background: linear-gradient(135deg, rgba(201,168,76,0.13), rgba(201,168,76,0.04));
+    border: 1px solid rgba(201,168,76,0.28);
+}
+.order-item.spent { opacity: 0.3; }
+
+.o-pos {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: var(--gold-dark);
+    min-width: 18px;
+}
+.o-init {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--gold);
+    min-width: 26px;
+}
+.o-name { flex: 1; font-size: 0.95rem; }
+
+.active-pip {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    color: var(--gold);
+}
+.next-pip {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    color: var(--parchment-dim);
+}
+
+/* Scrollbar */
+.order-list::-webkit-scrollbar         { width: 4px; }
+.order-list::-webkit-scrollbar-track   { background: transparent; }
+.order-list::-webkit-scrollbar-thumb   { background: var(--gold-dark); border-radius: 2px; }
+
+/* ════════════════════════════════════
+   ENCOUNTER CONTROLS
+════════════════════════════════════ */
+.encounter-controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+#next-btn {
+    flex: 2;
+    padding: 15px;
+    background: linear-gradient(160deg, #0e2e0e, #1a4d1a);
+    border: 2px solid #2e6b2e;
+    color: #a8d8a8;
+    border-radius: 4px;
+    font-size: 0.95rem;
+}
+#next-btn:hover {
+    background: linear-gradient(160deg, #1a4d1a, #246424);
+    box-shadow: 0 0 18px rgba(46,107,46,0.4);
+}
+#next-btn:active { transform: scale(0.99); }
+
+#end-btn {
+    flex: 1;
+    padding: 15px;
+    background: linear-gradient(160deg, #2a0808, #420e0e);
+    border: 1px solid #5a1010;
+    color: rgba(240,222,180,0.6);
+    border-radius: 4px;
+    font-size: 0.82rem;
+}
+#end-btn:hover {
+    border-color: var(--monster);
+    color: var(--parchment);
+}
+
+/* ════════════════════════════════════
+   FADE-IN ANIMATION
+════════════════════════════════════ */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.current-card { animation: fadeIn 0.3s ease; }
