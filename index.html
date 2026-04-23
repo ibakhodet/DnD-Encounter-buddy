@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#191613">
     <title>DnD Encounter Buddy</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cg stroke='%23c9a84c' stroke-linecap='round' stroke-width='2.2' fill='none'%3E%3Cline x1='6' y1='6' x2='26' y2='26'/%3E%3Cline x1='26' y1='6' x2='6' y2='26'/%3E%3Cline x1='10' y1='10' x2='4' y2='10'/%3E%3Cline x1='10' y1='10' x2='10' y2='4'/%3E%3Cline x1='22' y1='10' x2='28' y2='10'/%3E%3Cline x1='22' y1='10' x2='22' y2='4'/%3E%3C/g%3E%3C/svg%3E">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
@@ -20,11 +22,22 @@
         </header>
 
         <main class="setup-main">
+            <div class="settings-strip">
+                <button type="button" class="settings-toggle hp-toggle" aria-pressed="false" aria-label="Toggle HP tracking">
+                    <span class="toggle-dot"></span>
+                    <span class="toggle-label">♥ Track HP</span>
+                </button>
+                <span class="settings-hint">Off by default — turn on if you don't have D&amp;D Beyond open.</span>
+            </div>
+
             <div class="card">
                 <h2 class="card-title">Add Combatant</h2>
                 <div class="form-row">
                     <input type="text" id="name-input" placeholder="Name..." maxlength="30" autocomplete="off">
-                    <input type="number" id="initiative-input" placeholder="Init." min="-10" max="99" autocomplete="off">
+                    <input type="number" id="initiative-input" placeholder="Init." min="-10" max="99" inputmode="numeric" autocomplete="off">
+                </div>
+                <div id="hp-input-wrap" class="hp-input-wrap" style="display:none">
+                    <input type="number" id="hp-input" placeholder="Max HP (optional)" min="1" max="999" inputmode="numeric" autocomplete="off">
                 </div>
                 <div class="type-selector">
                     <label class="type-opt player">
@@ -76,6 +89,14 @@
         </header>
 
         <main class="encounter-main">
+            <div class="settings-strip compact">
+                <button type="button" class="settings-toggle hp-toggle" aria-pressed="false" aria-label="Toggle HP tracking">
+                    <span class="toggle-dot"></span>
+                    <span class="toggle-label">♥ Track HP</span>
+                </button>
+                <span class="settings-hint">Space = next turn</span>
+            </div>
+
             <div class="current-card">
                 <p class="turn-label">⚔ &nbsp;Current Turn&nbsp; ⚔</p>
                 <div class="current-type-badge" id="current-type"></div>
@@ -94,7 +115,10 @@
                 <h3 class="mc-title">Add Combatant to Encounter</h3>
                 <div class="form-row">
                     <input type="text" id="mc-name" placeholder="Name..." maxlength="30" autocomplete="off">
-                    <input type="number" id="mc-initiative" placeholder="Init." min="-10" max="99" autocomplete="off">
+                    <input type="number" id="mc-initiative" placeholder="Init." min="-10" max="99" inputmode="numeric" autocomplete="off">
+                </div>
+                <div id="mc-hp-input-wrap" class="hp-input-wrap" style="display:none">
+                    <input type="number" id="mc-hp" placeholder="Max HP (optional)" min="1" max="999" inputmode="numeric" autocomplete="off">
                 </div>
                 <div class="type-selector">
                     <label class="type-opt player">
