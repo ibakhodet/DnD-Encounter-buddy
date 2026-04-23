@@ -204,8 +204,8 @@ function renderSetupRow(c, i) {
             <span class="c-name editable" onclick="startEditName('${c.id}', this)">${esc(c.name)}</span>
             <span class="type-badge ${c.type}">${c.type}</span>
             ${hpBit}
-            <button class="reorder-btn" onclick="moveCombatant('${c.id}', -1)" ${!sameInitAbove ? 'disabled' : ''} aria-label="Move up (only among same initiative)">▲</button>
-            <button class="reorder-btn" onclick="moveCombatant('${c.id}', 1)" ${!sameInitBelow ? 'disabled' : ''} aria-label="Move down (only among same initiative)">▼</button>
+            <button class="reorder-btn" tabindex="-1" onclick="moveCombatant('${c.id}', -1)" ${!sameInitAbove ? 'disabled' : ''} aria-label="Move up (only among same initiative)">▲</button>
+            <button class="reorder-btn" tabindex="-1" onclick="moveCombatant('${c.id}', 1)" ${!sameInitBelow ? 'disabled' : ''} aria-label="Move down (only among same initiative)">▼</button>
             <button class="remove-btn" onclick="removeCombatant('${c.id}')" aria-label="Remove">✕</button>
         </div>
     `;
@@ -309,6 +309,7 @@ function nextTurn() {
     if (!result) return;
     if (result.wrapped) round++;
     currentIdx = result.idx;
+    expanded.clear();
     renderEncounter();
 }
 
@@ -321,6 +322,7 @@ function toggleDead(id) {
         if (result) {
             if (result.wrapped) round++;
             currentIdx = result.idx;
+            expanded.clear();
         }
     }
     renderEncounter();
@@ -553,8 +555,8 @@ function renderDrawer(c, sameInitAbove, sameInitBelow) {
     const reorderSection = `
         <div class="drawer-section reorder-section">
             <span class="drawer-label">Order</span>
-            <button class="reorder-btn wide" onclick="moveCombatant('${c.id}', -1)" ${!sameInitAbove ? 'disabled' : ''}>▲ Up</button>
-            <button class="reorder-btn wide" onclick="moveCombatant('${c.id}', 1)" ${!sameInitBelow ? 'disabled' : ''}>▼ Down</button>
+            <button class="reorder-btn wide" tabindex="-1" onclick="moveCombatant('${c.id}', -1)" ${!sameInitAbove ? 'disabled' : ''}>▲ Up</button>
+            <button class="reorder-btn wide" tabindex="-1" onclick="moveCombatant('${c.id}', 1)" ${!sameInitBelow ? 'disabled' : ''}>▼ Down</button>
             ${(!sameInitAbove && !sameInitBelow) ? '<span class="drawer-hint">Only moves among same initiative.</span>' : ''}
         </div>
     `;
@@ -575,9 +577,6 @@ function toggleTrackHp(on) {
     document.querySelectorAll('.hp-toggle').forEach(btn => {
         btn.setAttribute('aria-pressed', on ? 'true' : 'false');
         btn.classList.toggle('is-on', on);
-    });
-    document.querySelectorAll('.hp-input-wrap').forEach(w => {
-        w.style.display = on ? 'flex' : 'none';
     });
     renderList();
     renderEncounter();

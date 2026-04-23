@@ -155,10 +155,11 @@ input.error { border-color: var(--monster) !important; }
 input::placeholder { color: rgba(240,222,180,0.22); }
 
 .hp-input-wrap {
-    display: flex;
+    display: none;
     gap: 10px;
     margin-bottom: 12px;
 }
+body.track-hp .hp-input-wrap { display: flex; }
 .hp-input-wrap input { flex: 1; }
 
 /* ════════════════════════════════════
