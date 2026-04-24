@@ -153,6 +153,62 @@
         </main>
     </div>
 
+    <!-- ══════════ MUSIC PLAYER ══════════ -->
+    <div id="yt-players" aria-hidden="true">
+        <div id="yt-player-a"></div>
+        <div id="yt-player-b"></div>
+    </div>
+
+    <div id="music-player" class="music-player">
+        <div class="mp-themes">
+            <button class="mp-theme" data-theme="kamp" onclick="playTheme('kamp')">⚔ Kamp</button>
+            <button class="mp-theme" data-theme="eventyr" onclick="playTheme('eventyr')">⛰ Eventyr</button>
+            <button class="mp-theme" data-theme="spenning" onclick="playTheme('spenning')">☾ Spenning</button>
+        </div>
+        <div class="mp-controls">
+            <button id="mp-play" onclick="togglePlayPause()" aria-label="Play / Pause" disabled>▶</button>
+            <button id="mp-next" onclick="nextTrack()" aria-label="Next track" disabled>⏭</button>
+        </div>
+        <div class="mp-title-wrap">
+            <span class="mp-label">Now playing</span>
+            <div class="mp-title" id="mp-title">—</div>
+        </div>
+        <div class="mp-volume">
+            <span class="mp-vol-icon" aria-hidden="true">🔊</span>
+            <input type="range" id="mp-volume" min="0" max="100" value="50" aria-label="Volume">
+        </div>
+        <button id="mp-edit-btn" class="mp-icon-btn" onclick="openMpEdit()" aria-label="Edit tracks" title="Edit tracks">⚙</button>
+    </div>
+
+    <!-- Edit tracks modal -->
+    <div id="mp-edit-modal" class="mp-modal" hidden>
+        <div class="mp-modal-backdrop" onclick="closeMpEdit()"></div>
+        <div class="mp-modal-card" role="dialog" aria-label="Edit music tracks">
+            <h2 class="mp-modal-title">Music Tracks</h2>
+            <p class="mp-modal-hint">One YouTube URL or 11-char video ID per line. Titles fetched automatically when you save.</p>
+            <label class="mp-field">
+                <span class="mp-field-label">⚔ Kamp (Combat)</span>
+                <textarea id="mp-edit-kamp" rows="5" spellcheck="false"></textarea>
+            </label>
+            <label class="mp-field">
+                <span class="mp-field-label">⛰ Eventyr (Adventure)</span>
+                <textarea id="mp-edit-eventyr" rows="5" spellcheck="false"></textarea>
+            </label>
+            <label class="mp-field">
+                <span class="mp-field-label">☾ Spenning (Suspense)</span>
+                <textarea id="mp-edit-spenning" rows="5" spellcheck="false"></textarea>
+            </label>
+            <div class="mp-modal-actions">
+                <button type="button" class="mp-btn-secondary" onclick="resetMpTracks()">Reset to defaults</button>
+                <div class="mp-modal-actions-right">
+                    <button type="button" class="mp-btn-secondary" onclick="closeMpEdit()">Cancel</button>
+                    <button type="button" class="mp-btn-primary" onclick="saveMpEdit()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>
