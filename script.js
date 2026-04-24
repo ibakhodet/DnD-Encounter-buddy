@@ -806,7 +806,7 @@ function deepCopy(obj) {
 
 window.onYouTubeIframeAPIReady = function() {
     const mkPlayer = (elId, key) => new YT.Player(elId, {
-        height: '1', width: '1',
+        height: '120', width: '200',
         playerVars: { autoplay: 0, controls: 0, disablekb: 1, modestbranding: 1, playsinline: 1, rel: 0, fs: 0 },
         events: {
             onReady: () => { mp.ready[key] = true; onMpReady(); },
@@ -859,8 +859,9 @@ function playTheme(theme) {
     mp.playing = true;
     mp.crossfading = false;
     const p = mp.players[mp.activeKey];
-    try { p.setVolume(0); } catch (e) {}
-    mp.pendingFadeIn = mp.activeKey;
+    try { p.unMute(); } catch (e) {}
+    try { p.setVolume(mp.volume); } catch (e) {}
+    mp.pendingFadeIn = null; // first track plays at full volume, no fade-in
     try { p.loadVideoById(mp.queue[0].id); } catch (e) {}
     startMonitor();
     updateMpUi();
@@ -890,11 +891,9 @@ function startCrossfade(force = false) {
 
 function onMpStateChange(key, event) {
     if (event.data === YT.PlayerState.PLAYING) {
-        if (mp.pendingFadeIn === key) {
-            mp.pendingFadeIn = null;
-            fadeVolume(key, 0, mp.volume, FADE_MS);
-            updateMpTitle();
-        } else if (mp.pendingCrossfade === key) {
+        // Defensive unmute in case autoplay policy started us muted
+        try { mp.players[key].unMute(); } catch (e) {}
+        if (mp.pendingCrossfade === key) {
             mp.pendingCrossfade = null;
             const outgoingKey = mp.activeKey;
             const outgoing = mp.players[outgoingKey];
@@ -906,6 +905,10 @@ function onMpStateChange(key, event) {
             fadeVolume(key, 0, mp.volume, FADE_MS);
             mp.activeKey = key;
             mp.crossfading = false;
+            updateMpTitle();
+        } else if (key === mp.activeKey) {
+            // First track or resume — make sure target volume is applied
+            try { mp.players[key].setVolume(mp.volume); } catch (e) {}
             updateMpTitle();
         }
     } else if (event.data === YT.PlayerState.ENDED) {
