@@ -767,12 +767,40 @@ function initMusicPlayer() {
         volEl.value = mp.volume;
         volEl.addEventListener('input', e => setMpVolume(parseInt(e.target.value, 10)));
     }
+    const progEl = document.getElementById('mp-progress');
+    if (progEl) {
+        progEl.addEventListener('input', e => {
+            mp.seeking = true;
+            const p = mp.players[mp.activeKey];
+            try {
+                const dur = p.getDuration();
+                const pct = parseFloat(e.target.value) / 1000;
+                document.getElementById('mp-time-cur').textContent = formatMpTime(dur * pct);
+            } catch (ex) {}
+        });
+        progEl.addEventListener('change', e => {
+            const p = mp.players[mp.activeKey];
+            try {
+                const dur = p.getDuration();
+                const pct = parseFloat(e.target.value) / 1000;
+                p.seekTo(dur * pct, true);
+            } catch (ex) {}
+            setTimeout(() => { mp.seeking = false; }, 300);
+        });
+    }
     document.addEventListener('keydown', e => {
         if (e.key === 'Escape') {
             const modal = document.getElementById('mp-edit-modal');
             if (modal && !modal.hidden) closeMpEdit();
         }
     });
+}
+
+function formatMpTime(secs) {
+    if (!isFinite(secs) || secs < 0) return '0:00';
+    const m = Math.floor(secs / 60);
+    const s = Math.floor(secs % 60);
+    return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
 function loadMpState() {
@@ -965,15 +993,26 @@ function startMonitor() {
     if (mp.monitor) clearInterval(mp.monitor);
     mp.monitor = setInterval(() => {
         const p = mp.players[mp.activeKey];
-        if (!p || !mp.playing || mp.crossfading) return;
+        if (!p) return;
         try {
             const dur = p.getDuration();
             const cur = p.getCurrentTime();
-            if (dur > 0 && dur - cur < CROSSFADE_LEAD) {
+            updateMpProgress(cur, dur);
+            if (mp.playing && !mp.crossfading && dur > 0 && dur - cur < CROSSFADE_LEAD) {
                 startCrossfade();
             }
         } catch (e) {}
     }, 500);
+}
+
+function updateMpProgress(cur, dur) {
+    const slider = document.getElementById('mp-progress');
+    const curEl = document.getElementById('mp-time-cur');
+    const durEl = document.getElementById('mp-time-dur');
+    if (durEl) durEl.textContent = formatMpTime(dur);
+    if (mp.seeking) return;
+    if (curEl) curEl.textContent = formatMpTime(cur);
+    if (slider && dur > 0) slider.value = Math.round((cur / dur) * 1000);
 }
 
 function updateMpUi() {
@@ -992,6 +1031,11 @@ function updateMpTitle() {
     if (!el) return;
     const cur = mp.queue[mp.queueIdx];
     el.textContent = cur ? cur.title : '—';
+    // Reset progress display when track changes
+    const slider = document.getElementById('mp-progress');
+    const curT = document.getElementById('mp-time-cur');
+    if (slider) slider.value = 0;
+    if (curT) curT.textContent = '0:00';
 }
 
 function setMpVolume(v) {

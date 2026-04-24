@@ -977,6 +977,50 @@ body.edit-modal-open { overflow: hidden; }
     text-overflow: ellipsis;
 }
 
+.mp-progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+}
+.mp-time {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: var(--parchment-dim);
+    letter-spacing: 0.5px;
+    min-width: 34px;
+    text-align: center;
+    flex-shrink: 0;
+}
+#mp-progress {
+    -webkit-appearance: none;
+    appearance: none;
+    flex: 1;
+    min-width: 60px;
+    height: 4px;
+    background: rgba(201,168,76,0.18);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+}
+#mp-progress::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 1px solid var(--gold-light);
+    cursor: pointer;
+    box-shadow: 0 0 4px var(--gold-glow);
+}
+#mp-progress::-moz-range-thumb {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 1px solid var(--gold-light);
+    cursor: pointer;
+}
+
 .mp-volume {
     display: flex;
     align-items: center;
